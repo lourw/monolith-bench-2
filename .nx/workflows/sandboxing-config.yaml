@@ -1,0 +1,15 @@
+# Workspace-wide exclusions. These apply to every task's IO snapshot.
+exclude-reads:
+  - apps/shop/test-output/playwright/**
+exclude-writes:
+  - apps/shop/test-output/playwright/**
+
+# e2e specs live inside the shop project (apps/shop/e2e), so these apply to
+# shop's tasks: e2e reads the preview build and writes Playwright logs.
+task-exclusions:
+  - project: 'shop'
+    exclude-reads:
+      - apps/shop/dist/**
+      - apps/shop/out-tsc/**
+    exclude-writes:
+      - apps/shop/test-output/**/*.log

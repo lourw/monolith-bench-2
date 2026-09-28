@@ -1,0 +1,43 @@
+import { InputsPanel } from '../../../components/inputs/panel/inputs-panel';
+import { CART_SUMMARY_FEATURE } from './cart-summary.routes';
+
+export interface CartSummaryHeaderProps {
+  count: number;
+  total: number;
+  loading: boolean;
+  onRefresh: () => void;
+}
+
+export function CartSummaryHeader({
+  count,
+  total,
+  loading,
+  onRefresh,
+}: CartSummaryHeaderProps) {
+  return (
+    <header
+      className="feature-header"
+      data-testid={`${CART_SUMMARY_FEATURE.testId}-header`}
+    >
+      <div>
+        <h1 className="feature-title">{CART_SUMMARY_FEATURE.title}</h1>
+        <p className="feature-subtitle">
+          {CART_SUMMARY_FEATURE.domain} · {CART_SUMMARY_FEATURE.kind}
+        </p>
+      </div>
+      <div className="feature-header-actions">
+        <InputsPanel label="Items" value={count} tone="info" />
+        <InputsPanel label="Total" value={total} tone="success" />
+        <button
+          type="button"
+          className="feature-button"
+          onClick={onRefresh}
+          disabled={loading}
+          data-testid={`${CART_SUMMARY_FEATURE.testId}-refresh`}
+        >
+          {loading ? 'Refreshing…' : 'Refresh'}
+        </button>
+      </div>
+    </header>
+  );
+}

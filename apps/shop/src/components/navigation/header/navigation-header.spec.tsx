@@ -1,0 +1,84 @@
+import { fireEvent, render, screen } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
+import { NavigationHeader } from './navigation-header';
+import { NavigationHeaderGroup } from './navigation-header-group';
+import {
+  NAVIGATION_HEADER_TONES,
+  isNavigationHeaderTone,
+  toneFromValue,
+} from './navigation-header-variants';
+
+describe('NavigationHeader', () => {
+  it('renders the label', () => {
+    render(<NavigationHeader label="Total" value={42} />);
+    expect(screen.getByTestId('ui-navigation-header')).toBeInTheDocument();
+    expect(screen.getByText('Total')).toBeInTheDocument();
+  });
+
+  it('applies tone and size attributes', () => {
+    render(
+      <NavigationHeader label="Tone" tone="danger" size="lg" testId="custom" />,
+    );
+    const el = screen.getByTestId('custom');
+    expect(el).toHaveAttribute('data-tone', 'danger');
+    expect(el).toHaveAttribute('data-size', 'lg');
+  });
+
+  it('calls onSelect when clicked', () => {
+    const onSelect = vi.fn();
+    render(<NavigationHeader label="Click me" onSelect={onSelect} />);
+    fireEvent.click(screen.getByTestId('ui-navigation-header'));
+    expect(onSelect).toHaveBeenCalledWith('Click me');
+  });
+
+  it('renders children', () => {
+    render(
+      <NavigationHeader label="Parent">
+        <span>child content</span>
+      </NavigationHeader>,
+    );
+    expect(screen.getByText('child content')).toBeInTheDocument();
+  });
+});
+
+describe('NavigationHeaderGroup', () => {
+  it('renders every item', () => {
+    render(
+      <NavigationHeaderGroup
+        title="Group"
+        items={[
+          { id: 'a', label: 'Alpha', value: 1 },
+          { id: 'b', label: 'Beta', value: -1 },
+        ]}
+      />,
+    );
+    expect(
+      screen.getByTestId('ui-navigation-header-group-a'),
+    ).toBeInTheDocument();
+    expect(screen.getByTestId('ui-navigation-header-group-b')).toHaveAttribute(
+      'data-tone',
+      'danger',
+    );
+  });
+
+  it('shows an empty message', () => {
+    render(<NavigationHeaderGroup items={[]} />);
+    expect(screen.getByText('Nothing to show')).toBeInTheDocument();
+  });
+});
+
+describe('variants', () => {
+  it('derives tones from values', () => {
+    expect(toneFromValue(undefined)).toBe('neutral');
+    expect(toneFromValue(0)).toBe('warning');
+    expect(toneFromValue(5)).toBe('success');
+    expect(toneFromValue('abc')).toBe('info');
+  });
+
+  it('validates tones', () => {
+    for (const tone of NAVIGATION_HEADER_TONES) {
+      expect(isNavigationHeaderTone(tone)).toBe(true);
+    }
+    expect(isNavigationHeaderTone('bogus')).toBe(false);
+  });
+});

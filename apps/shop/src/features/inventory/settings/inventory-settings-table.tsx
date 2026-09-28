@@ -1,0 +1,74 @@
+import { MediaStat } from '../../../components/media/stat/media-stat';
+import type { InventorySettingsItem } from './inventory-settings.model';
+import { INVENTORY_SETTINGS_FEATURE } from './inventory-settings.routes';
+import {
+  formatInventorySettingsAmount,
+  inventorySettingsStatusTone,
+} from './inventory-settings.utils';
+
+export interface InventorySettingsTableProps {
+  items: ReadonlyArray<InventorySettingsItem>;
+  selectedId: string | null;
+  onSelect: (id: string) => void;
+}
+
+export function InventorySettingsTable({
+  items,
+  selectedId,
+  onSelect,
+}: InventorySettingsTableProps) {
+  if (items.length === 0) {
+    return (
+      <p
+        className="feature-empty"
+        data-testid={`${INVENTORY_SETTINGS_FEATURE.testId}-empty`}
+      >
+        No inventory settings entries match the current filter.
+      </p>
+    );
+  }
+
+  return (
+    <table
+      className="feature-table"
+      data-testid={`${INVENTORY_SETTINGS_FEATURE.testId}-table`}
+    >
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Amount</th>
+          <th>Qty</th>
+          <th>Status</th>
+          <th>Tags</th>
+        </tr>
+      </thead>
+      <tbody>
+        {items.map((item) => (
+          <tr
+            key={item.id}
+            className={
+              item.id === selectedId ? 'feature-row selected' : 'feature-row'
+            }
+            data-testid={`${INVENTORY_SETTINGS_FEATURE.testId}-row`}
+            data-item-id={item.id}
+            aria-selected={item.id === selectedId}
+            onClick={() => onSelect(item.id)}
+          >
+            <td className="feature-row-name">{item.name}</td>
+            <td>{formatInventorySettingsAmount(item.amount)}</td>
+            <td>{item.quantity}</td>
+            <td>
+              <MediaStat
+                label={item.status}
+                tone={inventorySettingsStatusTone(item.status)}
+                size="sm"
+                testId={`${INVENTORY_SETTINGS_FEATURE.testId}-status-${item.id}`}
+              />
+            </td>
+            <td>{item.tags.join(', ')}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}

@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+env:
+  NX_CLOUD_CONTINUOUS_ASSIGNMENT: true
+  NX_CLOUD_AUTO_TASK_PACKING: true
+  NX_CLOUD_USE_IO_SNAPSHOTS: true
+  NX_CLOUD_BUFFER_TASK_COMPLETIONS: false
+  NX_CLOUD_AGENT_TASK_QUEUE: true
+  NX_CLOUD_AGENT_PREFETCH_SECONDS: 60
+  NX_CLOUD_IO_SNAPSHOTS_STRICT_REPORTS: false
+  # Part of every task hash (nx.json sharedGlobals).
+  CI_RUNNER: GHA
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          filter: tree:0
+          fetch-depth: 0
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: 'npm'
+      - run: npm ci
+      - uses: nrwl/nx-set-shas@v4
+      - run: npx nx-cloud start-nx-agents
+      - name: Buffer time # this is only needed cause we are running in a dedicated cluster with no activity. This is not needed in a normal scenario.
+        run: sleep 120
+      - name: Run all checks concurrently
+        run: |
+          pids=()
+          npx nx-cloud record -- nx format:check & pids+=($!)
+          npx nx-cloud record -- nx sync:check & pids+=($!)
+          npx nx validate --no-agents & pids+=($!)
+          npx nx run-many -t build typecheck lint test-ci e2e-ci & pids+=($!)
+
+          status=0
+          for pid in "${pids[@]}"; do
+            wait "$pid" || status=1
+          done
+          exit $status

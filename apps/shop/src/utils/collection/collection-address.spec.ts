@@ -1,0 +1,95 @@
+import { describe, expect, it } from 'vitest';
+import {
+  COLLECTION_ADDRESS_DEFAULTS,
+  COLLECTION_ADDRESS_KIND,
+  compareCollectionAddress,
+  collectionAddress,
+  collectionAddressKeyed,
+  collectionAddressMany,
+  collectionAddressProduct,
+  isCollectionAddressValid,
+  summarizeCollectionAddress,
+} from './collection-address';
+import { chunk, clampLength, hashString } from './collection-address-helpers';
+
+describe('util-collection-address', () => {
+  it('exposes its kind', () => {
+    expect(COLLECTION_ADDRESS_KIND).toBe('collection-address');
+  });
+
+  it('returns the fallback for empty input', () => {
+    expect(collectionAddress('')).toBe(COLLECTION_ADDRESS_DEFAULTS.fallback);
+    expect(collectionAddress('   ')).toBe(COLLECTION_ADDRESS_DEFAULTS.fallback);
+    expect(collectionAddress('', { fallback: 'n/a' })).toBe('n/a');
+  });
+
+  it('formats non-empty values into a bounded string', () => {
+    const result = collectionAddress('Wireless Headphones 42', {
+      maxLength: 10,
+    });
+    expect(typeof result).toBe('string');
+    expect(result.length).toBeGreaterThan(0);
+    expect(result.length).toBeLessThanOrEqual(10);
+  });
+
+  it('is deterministic', () => {
+    expect(collectionAddress('same input')).toBe(
+      collectionAddress('same input'),
+    );
+    expect(compareCollectionAddress('same', 'same')).toBe(0);
+  });
+
+  it('formats many values', () => {
+    expect(collectionAddressMany(['a', 2, 'c'])).toHaveLength(3);
+  });
+
+  it('validates input', () => {
+    expect(isCollectionAddressValid('value')).toBe(true);
+    expect(isCollectionAddressValid(12)).toBe(true);
+    expect(isCollectionAddressValid('')).toBe(false);
+    expect(isCollectionAddressValid(Number.NaN)).toBe(false);
+    expect(isCollectionAddressValid(null)).toBe(false);
+  });
+
+  it('formats a product', () => {
+    const result = collectionAddressProduct({
+      id: '1',
+      name: 'Desk Lamp',
+      description: 'A lamp',
+      price: 19.99,
+      category: 'Home',
+      imageUrl: '',
+      inStock: true,
+      rating: 4,
+      reviewCount: 2,
+    });
+    expect(result.length).toBeGreaterThan(0);
+  });
+
+  it('summarizes values', () => {
+    const summary = summarizeCollectionAddress(['alpha', 'be', 'gamma-ray']);
+    expect(summary.count).toBe(3);
+    expect(summary.longest.length).toBeGreaterThanOrEqual(
+      summary.shortest.length,
+    );
+    expect(summary.checksum).toBeGreaterThanOrEqual(0);
+  });
+
+  it('groups records by a key', () => {
+    const grouped = collectionAddressKeyed(
+      [
+        { id: 'a', status: 'open' },
+        { id: 'b', status: 'open' },
+        { id: 'c', status: 'closed' },
+      ],
+      'status',
+    );
+    expect(grouped.size).toBe(2);
+  });
+
+  it('helpers behave', () => {
+    expect(clampLength('abcdef', 3)).toHaveLength(3);
+    expect(hashString('x')).toBe(hashString('x'));
+    expect(chunk([1, 2, 3, 4, 5], 2)).toEqual([[1, 2], [3, 4], [5]]);
+  });
+});

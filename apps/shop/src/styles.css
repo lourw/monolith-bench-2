@@ -1,0 +1,250 @@
+/* Global styles for the shop application */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
+    'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+#root {
+  height: 100%;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Generated feature / ui library styles                                   */
+/* ---------------------------------------------------------------------- */
+
+.app-nav {
+  display: flex;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.app-nav a {
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.app-nav a:hover {
+  text-decoration: underline;
+}
+
+.feature-page,
+.feature-index {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.feature-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.feature-title {
+  font-size: 1.75rem;
+  margin-bottom: 4px;
+}
+
+.feature-subtitle {
+  color: #666;
+  text-transform: capitalize;
+}
+
+.feature-header-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.feature-button {
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: 1px solid #667eea;
+  background: #667eea;
+  color: #fff;
+  cursor: pointer;
+}
+
+.feature-button.secondary {
+  background: transparent;
+  color: #667eea;
+}
+
+.feature-button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.feature-filters {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.feature-input,
+.feature-select {
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+
+.feature-input {
+  flex: 1;
+}
+
+.feature-body {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
+  gap: 24px;
+}
+
+.feature-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.feature-table th,
+.feature-table td {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid #eee;
+}
+
+.feature-row {
+  cursor: pointer;
+}
+
+.feature-row:hover {
+  background: #f0f3ff;
+}
+
+.feature-row.selected {
+  background: #e4e9ff;
+}
+
+.feature-empty,
+.feature-panel-hint {
+  color: #666;
+  padding: 16px;
+}
+
+.feature-panel,
+.feature-summary {
+  background: #fff;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.feature-panel-title {
+  font-size: 1.25rem;
+  margin-bottom: 8px;
+}
+
+.feature-panel-description {
+  color: #555;
+  margin-bottom: 12px;
+}
+
+.feature-panel-extra {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.feature-tags {
+  display: flex;
+  gap: 6px;
+  list-style: none;
+  margin: 12px 0;
+}
+
+.feature-tag {
+  background: #f0f0f5;
+  border-radius: 999px;
+  padding: 2px 10px;
+  font-size: 0.8rem;
+}
+
+.feature-summary-title {
+  font-size: 1rem;
+  margin-bottom: 8px;
+}
+
+.feature-summary-highlights {
+  margin: 12px 0 0 20px;
+  color: #555;
+}
+
+.ui-group {
+  margin: 8px 0;
+}
+
+.ui-group-title {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 6px;
+}
+
+.ui-group-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ui-group-empty {
+  color: #999;
+  font-size: 0.85rem;
+}
+
+.ui-label {
+  font-weight: 600;
+}
+
+.feature-index-group {
+  margin-bottom: 24px;
+}
+
+.feature-index-domain {
+  text-transform: capitalize;
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+}
+
+.feature-index-links {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 6px 16px;
+  list-style: none;
+}
+
+.feature-index-links a {
+  color: #4c51bf;
+  text-decoration: none;
+}

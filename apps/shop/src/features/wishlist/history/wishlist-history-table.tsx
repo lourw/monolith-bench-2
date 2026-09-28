@@ -1,0 +1,74 @@
+import { CoreTile } from '../../../components/core/tile/core-tile';
+import type { WishlistHistoryItem } from './wishlist-history.model';
+import { WISHLIST_HISTORY_FEATURE } from './wishlist-history.routes';
+import {
+  formatWishlistHistoryAmount,
+  wishlistHistoryStatusTone,
+} from './wishlist-history.utils';
+
+export interface WishlistHistoryTableProps {
+  items: ReadonlyArray<WishlistHistoryItem>;
+  selectedId: string | null;
+  onSelect: (id: string) => void;
+}
+
+export function WishlistHistoryTable({
+  items,
+  selectedId,
+  onSelect,
+}: WishlistHistoryTableProps) {
+  if (items.length === 0) {
+    return (
+      <p
+        className="feature-empty"
+        data-testid={`${WISHLIST_HISTORY_FEATURE.testId}-empty`}
+      >
+        No wishlist history entries match the current filter.
+      </p>
+    );
+  }
+
+  return (
+    <table
+      className="feature-table"
+      data-testid={`${WISHLIST_HISTORY_FEATURE.testId}-table`}
+    >
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Amount</th>
+          <th>Qty</th>
+          <th>Status</th>
+          <th>Tags</th>
+        </tr>
+      </thead>
+      <tbody>
+        {items.map((item) => (
+          <tr
+            key={item.id}
+            className={
+              item.id === selectedId ? 'feature-row selected' : 'feature-row'
+            }
+            data-testid={`${WISHLIST_HISTORY_FEATURE.testId}-row`}
+            data-item-id={item.id}
+            aria-selected={item.id === selectedId}
+            onClick={() => onSelect(item.id)}
+          >
+            <td className="feature-row-name">{item.name}</td>
+            <td>{formatWishlistHistoryAmount(item.amount)}</td>
+            <td>{item.quantity}</td>
+            <td>
+              <CoreTile
+                label={item.status}
+                tone={wishlistHistoryStatusTone(item.status)}
+                size="sm"
+                testId={`${WISHLIST_HISTORY_FEATURE.testId}-status-${item.id}`}
+              />
+            </td>
+            <td>{item.tags.join(', ')}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}

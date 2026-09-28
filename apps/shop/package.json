@@ -1,0 +1,19 @@
+{
+  "name": "@org/shop",
+  "version": "0.0.1",
+  "private": true,
+  "nx": {
+    "name": "shop",
+    "projectType": "application",
+    "tags": [
+      "scope:shop"
+    ],
+    "targets": {
+      "preview": {
+        "dependsOn": [
+          "build"
+        ]
+      }
+    }
+  }
+}

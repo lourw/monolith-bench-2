@@ -1,0 +1,74 @@
+import { LayoutToolbar } from '../../../components/layout/toolbar/layout-toolbar';
+import type { CatalogWizardItem } from './catalog-wizard.model';
+import { CATALOG_WIZARD_FEATURE } from './catalog-wizard.routes';
+import {
+  formatCatalogWizardAmount,
+  catalogWizardStatusTone,
+} from './catalog-wizard.utils';
+
+export interface CatalogWizardTableProps {
+  items: ReadonlyArray<CatalogWizardItem>;
+  selectedId: string | null;
+  onSelect: (id: string) => void;
+}
+
+export function CatalogWizardTable({
+  items,
+  selectedId,
+  onSelect,
+}: CatalogWizardTableProps) {
+  if (items.length === 0) {
+    return (
+      <p
+        className="feature-empty"
+        data-testid={`${CATALOG_WIZARD_FEATURE.testId}-empty`}
+      >
+        No catalog wizard entries match the current filter.
+      </p>
+    );
+  }
+
+  return (
+    <table
+      className="feature-table"
+      data-testid={`${CATALOG_WIZARD_FEATURE.testId}-table`}
+    >
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Amount</th>
+          <th>Qty</th>
+          <th>Status</th>
+          <th>Tags</th>
+        </tr>
+      </thead>
+      <tbody>
+        {items.map((item) => (
+          <tr
+            key={item.id}
+            className={
+              item.id === selectedId ? 'feature-row selected' : 'feature-row'
+            }
+            data-testid={`${CATALOG_WIZARD_FEATURE.testId}-row`}
+            data-item-id={item.id}
+            aria-selected={item.id === selectedId}
+            onClick={() => onSelect(item.id)}
+          >
+            <td className="feature-row-name">{item.name}</td>
+            <td>{formatCatalogWizardAmount(item.amount)}</td>
+            <td>{item.quantity}</td>
+            <td>
+              <LayoutToolbar
+                label={item.status}
+                tone={catalogWizardStatusTone(item.status)}
+                size="sm"
+                testId={`${CATALOG_WIZARD_FEATURE.testId}-status-${item.id}`}
+              />
+            </td>
+            <td>{item.tags.join(', ')}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}

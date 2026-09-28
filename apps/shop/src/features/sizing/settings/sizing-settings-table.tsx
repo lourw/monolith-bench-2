@@ -1,0 +1,74 @@
+import { NavigationStat } from '../../../components/navigation/stat/navigation-stat';
+import type { SizingSettingsItem } from './sizing-settings.model';
+import { SIZING_SETTINGS_FEATURE } from './sizing-settings.routes';
+import {
+  formatSizingSettingsAmount,
+  sizingSettingsStatusTone,
+} from './sizing-settings.utils';
+
+export interface SizingSettingsTableProps {
+  items: ReadonlyArray<SizingSettingsItem>;
+  selectedId: string | null;
+  onSelect: (id: string) => void;
+}
+
+export function SizingSettingsTable({
+  items,
+  selectedId,
+  onSelect,
+}: SizingSettingsTableProps) {
+  if (items.length === 0) {
+    return (
+      <p
+        className="feature-empty"
+        data-testid={`${SIZING_SETTINGS_FEATURE.testId}-empty`}
+      >
+        No sizing settings entries match the current filter.
+      </p>
+    );
+  }
+
+  return (
+    <table
+      className="feature-table"
+      data-testid={`${SIZING_SETTINGS_FEATURE.testId}-table`}
+    >
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Amount</th>
+          <th>Qty</th>
+          <th>Status</th>
+          <th>Tags</th>
+        </tr>
+      </thead>
+      <tbody>
+        {items.map((item) => (
+          <tr
+            key={item.id}
+            className={
+              item.id === selectedId ? 'feature-row selected' : 'feature-row'
+            }
+            data-testid={`${SIZING_SETTINGS_FEATURE.testId}-row`}
+            data-item-id={item.id}
+            aria-selected={item.id === selectedId}
+            onClick={() => onSelect(item.id)}
+          >
+            <td className="feature-row-name">{item.name}</td>
+            <td>{formatSizingSettingsAmount(item.amount)}</td>
+            <td>{item.quantity}</td>
+            <td>
+              <NavigationStat
+                label={item.status}
+                tone={sizingSettingsStatusTone(item.status)}
+                size="sm"
+                testId={`${SIZING_SETTINGS_FEATURE.testId}-status-${item.id}`}
+              />
+            </td>
+            <td>{item.tags.join(', ')}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}

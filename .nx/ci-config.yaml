@@ -1,0 +1,10 @@
+dte:
+  distribute-on: 6 linux-large-js
+  scheduling-constraints:
+    - targets: ['e2e*']
+      cannot-run-with:
+        - targets: ['e2e*']
+
+lifecycle:
+  stop-after:
+    - test-ci
