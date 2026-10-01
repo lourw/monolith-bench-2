@@ -12,13 +12,19 @@
       "!{projectRoot}/vitest.config.[jt]s",
       "!{projectRoot}/test-setup.[jt]s"
     ],
-    "sharedGlobals": [{ "env": "CI_RUNNER" }]
+    "sharedGlobals": [
+      {
+        "env": "CI_RUNNER"
+      }
+    ]
   },
   "plugins": [
     {
       "plugin": "@nx/js/typescript",
       "options": {
-        "typecheck": { "targetName": "typecheck" },
+        "typecheck": {
+          "targetName": "typecheck"
+        },
         "build": {
           "targetName": "build",
           "configName": "tsconfig.lib.json",
@@ -38,7 +44,12 @@
         "typecheckTargetName": "typecheck"
       }
     },
-    { "plugin": "@nx/eslint/plugin", "options": { "targetName": "lint" } },
+    {
+      "plugin": "@nx/eslint/plugin",
+      "options": {
+        "targetName": "lint"
+      }
+    },
     {
       "plugin": "@nx/vite/plugin",
       "options": {
@@ -54,15 +65,23 @@
     },
     {
       "plugin": "@nx/playwright/plugin",
-      "options": { "targetName": "e2e", "ciTargetName": "e2e-ci" }
+      "options": {
+        "targetName": "e2e",
+        "ciTargetName": "e2e-ci"
+      }
     },
     {
       "plugin": "@nx/vitest",
-      "options": { "testTargetName": "test", "ciTargetName": "test-ci" }
+      "options": {
+        "testTargetName": "test",
+        "ciTargetName": "test-ci"
+      }
     }
   ],
   "targetDefaults": {
-    "test": { "dependsOn": ["^build"] },
+    "test": {
+      "dependsOn": ["^build"]
+    },
     "@nx/js:tsc": {
       "cache": true,
       "dependsOn": ["^build"],
@@ -77,7 +96,9 @@
         "linter": "eslint",
         "bundler": "vite"
       },
-      "component": { "style": "css" },
+      "component": {
+        "style": "css"
+      },
       "library": {
         "style": "css",
         "linter": "eslint",
@@ -86,7 +107,7 @@
     }
   },
   "analytics": false,
-  "nxCloudId": "6ab83edb39941b5a9a34119c",
+  "nxCloudId": "6abeb6da86e3fe82ac7b68a5",
   "nxCloudUrl": "https://snapshot.nx.app",
   "bust": 6
 }
