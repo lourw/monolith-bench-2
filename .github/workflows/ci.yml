@@ -15,6 +15,7 @@ env:
   NX_CLOUD_AGENT_TASK_QUEUE: true
   NX_CLOUD_AGENT_PREFETCH_SECONDS: 60
   NX_CLOUD_IO_SNAPSHOTS_STRICT_REPORTS: false
+  NX_CLOUD_PACKING_CPU_MULTIPLIER: 1
   # Part of every task hash (nx.json sharedGlobals).
   CI_RUNNER: GHA
 permissions:
