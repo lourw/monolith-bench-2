@@ -39,15 +39,5 @@ jobs:
       - name: Buffer time # this is only needed cause we are running in a dedicated cluster with no activity. This is not needed in a normal scenario.
         run: sleep 120
       - name: Run all checks concurrently
-        run: |
-          pids=()
-          npx nx-cloud record -- nx format:check & pids+=($!)
-          npx nx-cloud record -- nx sync:check & pids+=($!)
-          npx nx validate --no-agents & pids+=($!)
-          npx nx run-many -t build typecheck lint test-ci e2e-ci & pids+=($!)
-
-          status=0
-          for pid in "${pids[@]}"; do
-            wait "$pid" || status=1
-          done
-          exit $status
+        run:
+          npx nx run-many -t build typecheck lint test-ci e2e-ci
